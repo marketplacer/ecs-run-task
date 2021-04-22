@@ -41,6 +41,7 @@ type Runner struct {
 	Config             *aws.Config
 	Overrides          []Override
 	Fargate            bool
+	CapacityProvider   string
 	SecurityGroups     []string
 	Subnets            []string
 	Environment        []string
@@ -192,6 +193,14 @@ func (r *Runner) Run(ctx context.Context) error {
 		if len(r.PlatformVersion) > 0 {
 			runTaskInput.PlatformVersion = aws.String(r.PlatformVersion)
 		}
+	}
+	if len(r.CapacityProvider) > 0 {
+		runTaskInput.CapacityProviderStrategy = append(
+			runTaskInput.CapacityProviderStrategy,
+			&ecs.CapacityProviderStrategyItem{
+				CapacityProvider: aws.String(r.CapacityProvider),
+			},
+		)
 	}
 	if len(r.Subnets) > 0 || len(r.SecurityGroups) > 0 {
 		runTaskInput.NetworkConfiguration = &ecs.NetworkConfiguration{

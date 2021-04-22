@@ -67,6 +67,11 @@ func main() {
 			Value: "",
 			Usage: "the platform version the task should run (only for FARGATE)",
 		},
+		&cli.StringFlag{
+			Name:  "capacity-provider, y",
+			Value: "",
+			Usage: "the capacity provider to use to schedule the task",
+		},
 		&cli.StringSliceFlag{
 			Name:  "security-group",
 			Usage: "Security groups to launch task in (required for FARGATE). Can be specified multiple times",
@@ -128,6 +133,7 @@ func main() {
 		r.LogGroupName = ctx.String("log-group")
 		r.Fargate = ctx.Bool("fargate")
 		r.PlatformVersion = ctx.String("platform-version")
+		r.CapacityProvider = ctx.String("capacity-provider")
 		r.SecurityGroups = ctx.StringSlice("security-group")
 		r.Subnets = ctx.StringSlice("subnet")
 		r.Environment = ctx.StringSlice("env")
