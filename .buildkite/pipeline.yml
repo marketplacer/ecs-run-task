@@ -3,7 +3,7 @@ steps:
     command: go test ./...
     plugins:
       - golang#v2.0.0:
-          version: "1.16"
+          version: "1.20"
           import: github.com/buildkite/ecs-run-task
 
   - label: "🛠"
@@ -12,18 +12,18 @@ steps:
           build: "."
           import: github.com/buildkite/ecs-run-task
           targets:
-            - version: "1.16"
+            - version: "1.20"
               goos: linux
               goarch: amd64
-            - version: "1.16"
+            - version: "1.20"
               goos: darwin
               goarch: amd64
-            - version: "1.16"
+            - version: "1.20"
               goos: windows
               goarch: amd64
-            - version: "1.16"
+            - version: "1.20"
               goos: linux
               goarch: arm64
-            - version: "1.16"
+            - version: "1.20"
               goos: darwin
               goarch: arm64
