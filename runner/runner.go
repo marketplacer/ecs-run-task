@@ -276,6 +276,14 @@ func (r *Runner) Run(ctx context.Context) error {
 	for _, task := range runResp.Tasks {
 		for _, container := range task.Containers {
 			containerID := path.Base(*container.ContainerArn)
+			containerName := *container.Name
+
+			// we do not want to spawn a log watcher for guardduty as that never emits any logs as the ecs-run-task binary will timeout waiting
+			if strings.Contains(containerName, "guardduty-agent") {
+				log.Printf("Skipping container %s as it is for Guardduty", containerName)
+				continue
+			}
+
 			watcher := &logWatcher{
 				LogGroupName:   r.LogGroupName,
 				LogStreamName:  logStreamName(streamPrefix, container, task),
@@ -339,6 +347,13 @@ func (r *Runner) Run(ctx context.Context) error {
 	// Get the final state of each task and container and write to cloudwatch logs
 	for _, task := range output.Tasks {
 		for _, container := range task.Containers {
+			// we do not care about guardduty containers as it exits when the main tasks container exits
+			containerName := *container.Name
+			if strings.Contains(containerName, "guardduty-agent") {
+				log.Printf("Skipping container %s as it is for Guardduty", containerName)
+				continue
+			}
+
 			lw := &logWriter{
 				LogGroupName:   r.LogGroupName,
 				LogStreamName:  logStreamName(streamPrefix, container, task),
