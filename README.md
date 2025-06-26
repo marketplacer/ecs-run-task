@@ -41,7 +41,7 @@ GLOBAL OPTIONS:
 ### Example
 
 ```bash
-$ aws-vault exec myprofile -- ecs-run-task --file examples/helloworld/taskdefinition.json echo "Hello from Docker!"
+$ AWS_PROFILE=myprofile ecs-run-task --file examples/helloworld/taskdefinition.json echo "Hello from Docker!"
 
 Hello from Docker!
 ...
